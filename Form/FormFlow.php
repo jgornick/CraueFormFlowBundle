@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @copyright 2011-2013 Christian Raue
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-abstract class FormFlow implements FormFlowInterface {
+abstract class FormFlow implements FormFlowInterface, \Iterator {
 
 	const TRANSITION_BACK = 'back';
 	const TRANSITION_RESET = 'reset';
@@ -755,4 +755,23 @@ abstract class FormFlow implements FormFlowInterface {
 		return $this->isStepSkipped();
 	}
 
+    function rewind() {
+        $this->currentStepNumber = 1;
+    }
+
+    function current() {
+        return $this->steps[$this->currentStepNumber - 1];
+    }
+
+    function key() {
+        return $this->currentStepNumber;
+    }
+
+    function next() {
+        ++$this->currentStepNumber;
+    }
+
+    function valid() {
+        return isset($this->steps[$this->currentStepNumber - 1]);
+    }
 }
